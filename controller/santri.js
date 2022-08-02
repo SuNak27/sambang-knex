@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 const Validator = require("fastest-validator");
 const v = new Validator();
+const { v4: uuidv4 } = require("uuid");
+
 const database = require("../config/database");
 
 router.post("/", async (req, res) => {
   const schema = {
-    uid_santri: { type: "string", min: 3, max: 255 },
     nis: { type: "string", min: 3, max: 255 },
     id_wilayah: { type: "number" },
     id_lembaga: { type: "number" },
@@ -19,7 +20,16 @@ router.post("/", async (req, res) => {
 
   const data = check(req.body);
   try {
-    const simpan = await database("santri").insert(req.body);
+    const data = {
+      uuid_santri: uuidv4(),
+      nis: req.body.nis,
+      id_wilayah: req.body.id_wilayah,
+      id_lembaga: req.body.id_lembaga,
+      nama: req.body.nama,
+      jenkel: req.body.jenkel,
+      alamat: req.body.alamat,
+    };
+    const simpan = await database("santri").insert(data);
     if (simpan) {
       return res.status(201).json({
         success: true,

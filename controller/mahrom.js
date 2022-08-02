@@ -84,6 +84,7 @@ router.get("/", async (req, res) => {
             .join("lembaga", "lembaga.id_lembaga", "=", "santri.id_lembaga")
             .select(
               "santri.id_santri",
+              "santri.nis",
               "santri.nama",
               "wilayah.nama_wilayah",
               "lembaga.nama_lembaga"
